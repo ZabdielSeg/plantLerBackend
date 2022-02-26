@@ -52,7 +52,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost/backend',
+    mongoUrl: process.env.MONGODB_URI,
     ttl: 60 * 60 * 24
   }),
   cookie: {
