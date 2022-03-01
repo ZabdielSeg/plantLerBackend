@@ -29,13 +29,6 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 
 const app = express();
 
-// Middleware Setup
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
@@ -48,7 +41,7 @@ app.locals.title = 'PlantLer';
 app.use(session({
   key: 'userID',
   secret: 'irongenerator',
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
@@ -61,6 +54,12 @@ app.use(session({
   }
 }));
 
+
+// Middleware Setup
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(flash());
 require('./passport')(app);
 
