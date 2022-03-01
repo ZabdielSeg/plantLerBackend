@@ -64,18 +64,6 @@ app.use(session({
 app.use(flash());
 require('./passport')(app);
 
-const authRoutes = require('./routes/auth');
-app.use('/api', authRoutes);
-
-const userRoutes = require('./routes/user.api');
-app.use('/api', userRoutes);
-
-const plantsRoutes = require('./routes/plants.api');
-app.use('/api', plantsRoutes);
-
-const index = require('./routes/index');
-app.use('/', index);
-
 app.use(
   cors({
     credentials: true,
@@ -92,6 +80,18 @@ app.use(function (req, res, next) {
 
   next();
 });
+
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
+
+const userRoutes = require('./routes/user.api');
+app.use('/api', userRoutes);
+
+const plantsRoutes = require('./routes/plants.api');
+app.use('/api', plantsRoutes);
+
+const index = require('./routes/index');
+app.use('/', index);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get("*", (req, res, next) => {
