@@ -67,7 +67,7 @@ require('./passport')(app);
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.FRONTEND_POINT]
+    // origin: [process.env.FRONTEND_POINT]
   })
 );
 
