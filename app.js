@@ -39,6 +39,7 @@ app.enable('trust proxy');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // default value for title local
@@ -54,7 +55,8 @@ app.use(session({
   proxy: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
-    ttl: 60 * 60 * 24
+    ttl: 60 * 60 * 24,
+    collectionName: 'sessions'
   }),
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
@@ -63,8 +65,8 @@ app.use(session({
   }
 }));
 
-app.use(flash());
 require('./passport')(app);
+app.use(flash());
 
 app.use(
   cors({
@@ -85,7 +87,6 @@ app.use('/api', plantsRoutes);
 const index = require('./routes/index');
 app.use('/', index);
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.get("*", (req, res, next) => {
   // If no routes match, send them the React HTML.
   res.sendFile(__dirname + "/public/index.html");
