@@ -29,6 +29,14 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 
 const app = express();
 
+// Middleware Setup
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.enable('trust proxy');
+
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
@@ -42,7 +50,8 @@ app.use(session({
   key: 'userID',
   secret: 'irongenerator',
   resave: true,
-  saveUninitialized: false,
+  saveUninitialized: true,
+  proxy: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
     ttl: 60 * 60 * 24
@@ -54,12 +63,6 @@ app.use(session({
   }
 }));
 
-
-// Middleware Setup
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(flash());
 require('./passport')(app);
 
