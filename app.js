@@ -50,8 +50,8 @@ app.locals.title = 'PlantLer';
 app.use(session({
   key: 'userID',
   secret: 'irongenerator',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   proxy: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
