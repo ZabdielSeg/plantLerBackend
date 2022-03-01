@@ -64,13 +64,6 @@ app.use(session({
 app.use(flash());
 require('./passport')(app);
 
-app.use(
-  cors({
-    credentials: true,
-    // origin: [process.env.FRONTEND_POINT]
-  })
-);
-
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
 
@@ -82,6 +75,13 @@ app.use('/api', plantsRoutes);
 
 const index = require('./routes/index');
 app.use('/', index);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.FRONTEND_POINT
+  })
+);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get("*", (req, res, next) => {
