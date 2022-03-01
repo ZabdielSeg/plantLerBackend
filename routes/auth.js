@@ -96,7 +96,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 
 
 router.get('/loggedin', (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (req.user) {
     const { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id } = req.user;
     const theUser = { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id };
     res.status(200).json(theUser);
