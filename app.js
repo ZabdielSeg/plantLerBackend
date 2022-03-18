@@ -71,7 +71,7 @@ app.use(flash());
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.FRONTEND_POINT, 'http://localhost:3000']
+    origin: [process.env.FRONTEND_POINT, 'http://localhost:3000', process.env.FRONTEND_CPANEL]
   })
 );
 
