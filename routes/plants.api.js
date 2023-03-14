@@ -6,7 +6,7 @@ const Plant = require('../models/Plant.schema');
 const isLoggedIn = require('../middlewares/isLoggedIn');
 const isSeller = require('../middlewares/isSeller');
 
-router.get('/plant/:id', (req, res, next) => { 
+router.get('/plant/:id', (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -85,5 +85,28 @@ router.get('/all-plants', (req, res, next) => {
     });
 });
 
+router.get('/search', (req, res, next) => {
+  const { wordToSearch } = req.query;
+  Plant.find()
+    .then(response => response.filter(plant => plant.plantName.toLowerCase().includes(wordToSearch.toLowerCase())))
+    .then(response => {
+      console.log(response)
+      if (response.length >= 1) {
+        Plant.find({ location: response[0].location })
+          .then(suggestions => {
+            let allSuggestions = suggestions;
+            if(suggestions.length >= 3) {allSuggestions = suggestions.slice(0, 2);}
+            res.status(200).json({ plant: response, suggestions: allSuggestions});
+          })
+          .catch(err => console.log(err));
+      } else {
+        res.status(500).json({message: 'Probablemente no tenemos ese producto'});
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ message: 'Sorry, something went wrong' });
+    });
+});
 
 module.exports = router;
